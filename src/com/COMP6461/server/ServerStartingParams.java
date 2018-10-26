@@ -7,6 +7,7 @@ public class ServerStartingParams {
 
     public ServerStartingParams() {
         this.port = 8080;
+        this.filePath = "";
     }
 
     @Override

@@ -24,7 +24,6 @@ public class SocketConnectionFromClient {
                 }
             }
 
-
             if (httpObject.isInline) {
                 wtr.println("Content-Length: " + httpObject.data.length());
                 wtr.println("");
@@ -37,8 +36,6 @@ public class SocketConnectionFromClient {
                 wtr.println(dataFromFile);
             }
             wtr.flush();
-
-
             printAndWriteToScreen(httpObject, socket);
 
         } catch (IOException e) {
@@ -76,7 +73,6 @@ public class SocketConnectionFromClient {
             }
             wtr.println("");
             wtr.flush();
-
             printAndWriteToScreen(httpObject, socket);
 
         } catch (IOException e) {

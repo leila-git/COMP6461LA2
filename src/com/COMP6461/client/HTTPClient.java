@@ -8,7 +8,7 @@ public class HTTPClient {
         boolean keepGoing = true;
         boolean executeCommand = true;
         while (keepGoing) {
-            System.out.println("Please enter command.");
+            System.out.println("Please enter command from client..");
             Scanner scanner = new Scanner(System.in);
             String arguments[] = scanner.nextLine().split(" ");
             for (String s : arguments) {
@@ -19,54 +19,14 @@ public class HTTPClient {
             }
             if (executeCommand) {
                 RequestLineParams httpObject = createHTTPObject(arguments);
-                // System.out.println(httpObject);
                 SocketConnectionFromClient.execute(httpObject);
             }
         }
-
-
-
-//        Socket s = new Socket("localHost", 8080);
-//        String body = new String();
-//        String response_header = new String();
-//        OutputStreamWriter output = new OutputStreamWriter(s.getOutputStream());
-//        PrintWriter out = new PrintWriter(output);
-//        String header = "POST /home/negar/new/ HTTP/1.0\r\nContent-Length: 3\r\nContent-Type: text/plain\r\n\r\nnow";
-//        // System.out.println(header);
-//        out.print(header);
-//        out.flush();
-//
-//        BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-//        String message = "";
-//        String outRead = "";
-//        //     output = in.read
-//        // Scanner scanner = new Scanner(in.readLine());
-//        while (true) {
-//
-//            String line = in.readLine();
-//
-//            if (line.isEmpty()) {
-//                break;
-//            }
-//            response_header = response_header + line + "\n";
-//        }
-//        while (true) {
-//
-//            String line = in.readLine();
-//            // System.out.println(line);
-//            if (line == null)
-//                break;
-//            body = body + line + "\n";
-//
-//        }
-//        System.out.print(response_header + "\r\n" + body);
     }
 
     public static RequestLineParams createHTTPObject(String ar[]) {
         RequestLineParams http = new RequestLineParams();
         for (int i = 0; i < ar.length; i++) {
-
-            // System.out.println("arguments : " + args[i]);
             if (i == 1) {
                 if (ar[i].toLowerCase().equals("get")) {
                     http.typeRequest = "GET";
@@ -105,9 +65,7 @@ public class HTTPClient {
                 http.fileName = ar[i + 1];
             }
         }
-        System.out.println(http);
         return http;
     }
-
 }
 

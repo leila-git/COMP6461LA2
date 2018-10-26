@@ -19,17 +19,22 @@ public class SocketConnectionFromServer implements Runnable {
         this.serverStartingParams = serverStartingParams;
     }
 
+    public void printIfDebug(String str) {
+        if (this.serverStartingParams.printDebugMessage)
+            System.out.println(str);
+    }
+
     public void initiateServer() {
         try {
             ServerSocket serverConnect = new ServerSocket(serverStartingParams.port);
-            System.out.println("Server started.\nListening for connections on port : " + serverStartingParams.port + " ...\n");
+            this.printIfDebug("Server started.\nListening for connections on port : " + serverStartingParams.port + " ...\n");
 
             // we listen until user halts server execution
             while (true) {
                 SocketConnectionFromServer myServer = new SocketConnectionFromServer(serverStartingParams);
                 myServer.socket = serverConnect.accept();
                 if (serverStartingParams.printDebugMessage) {
-                    System.out.println("Connection opened. (" + new Date() + ")");
+                    this.printIfDebug("Connection opened. (" + new Date() + ")");
                 }
 
                 // create dedicated thread to manage the client connection
@@ -45,7 +50,7 @@ public class SocketConnectionFromServer implements Runnable {
     public void run() {
         BufferedReader in = null;
         this.serverRequest = new HttpServerRequest();
-        System.out.println("Server started with request from client...");
+        this.printIfDebug("Server started with request from client...");
         try {
             in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             String input = in.readLine();
@@ -70,17 +75,14 @@ public class SocketConnectionFromServer implements Runnable {
                 in.read(charArray, 0, postDataI);
                 postData = new String(charArray);
             }
-            System.out.println("postdataad : \n " + postData);
             this.serverRequest.body.append(postData);
             this.performOperation();
-            System.out.println(this.serverRequest);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void performOperation() {
-        System.out.println("Operation started");
         responseToSend = new StringBuilder();
         responseToSend.append("HTTP/1.1 ");
         if (this.serverRequest.method.toLowerCase().equals("get")) {
@@ -91,23 +93,18 @@ public class SocketConnectionFromServer implements Runnable {
                 responseToSend.append("\n" + SERVER_NAME);
                 StringBuilder listOfFilesNames = new StringBuilder();
                 Path currentRelativePath = Paths.get("");
-                File folder = new File(currentRelativePath.toAbsolutePath().toString());
+                File folder = new File(currentRelativePath.toAbsolutePath().toString() + this.serverStartingParams.filePath);
                 File[] listOfFiles = folder.listFiles();
                 for (int i = 0; i < listOfFiles.length; i++) {
-                    System.out.println("File " + listOfFiles[i].getName());
                     listOfFilesNames.append("\n" + listOfFiles[i].getName());
-                    System.out.println("Directory " + listOfFiles[i].getName());
                 }
                 responseToSend.append("\nContent-Length:" + listOfFilesNames.length());
                 responseToSend.append("\n");
                 responseToSend.append("\n{" + listOfFilesNames + "\n}");
-
-
             } else {
                 Path currentRelativePath = Paths.get("");
                 File file = new File(currentRelativePath.toAbsolutePath().toString() + this.serverRequest.uri);
                 if (!file.exists()) {
-                    System.out.println("Wrong folder 404");
                     responseToSend.append("404 Not Found");
                     responseToSend.append("\nDate: " + new Date());
                     responseToSend.append("\n" + SERVER_NAME);
@@ -122,9 +119,7 @@ public class SocketConnectionFromServer implements Runnable {
                     try {
                         bufferedReader = new BufferedReader(new FileReader(file));
                         while ((readLine = bufferedReader.readLine()) != null) {
-                            System.out.println(readLine);
                             linesFromFile.append("\n" + readLine);
-                            // responseToSend.append("\n " + readLine);
                         }
                         bufferedReader.close();
                     } catch (IOException e) {
@@ -167,11 +162,11 @@ public class SocketConnectionFromServer implements Runnable {
     }
 
     public void sendResponse() {
-        System.out.println(this.responseToSend);
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             out.print(this.responseToSend);
             out.flush();
+            printIfDebug("Closing Connection with Client.");
             out.close();
             socket.close();
         } catch (IOException e) {
