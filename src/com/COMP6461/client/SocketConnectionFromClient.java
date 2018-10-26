@@ -14,10 +14,9 @@ public class SocketConnectionFromClient {
 
     public static void executePost(RequestLineParams httpObject) {
         try {
-            Socket socket = new Socket(httpObject.host, 8080);
+            Socket socket = new Socket(httpObject.host, httpObject.port);
             PrintWriter wtr = new PrintWriter(socket.getOutputStream());
-            wtr.println("");
-            wtr.println("POST /post HTTP/1.1");
+            wtr.println("POST " + httpObject.urlParameters + " HTTP/1.1");
             wtr.println("Host: " + httpObject.host);
             if (httpObject.headers.size() > 0) {
                 for (String temp : httpObject.headers) {
@@ -66,9 +65,9 @@ public class SocketConnectionFromClient {
 
     public static void executeGet(RequestLineParams httpObject) {
         try {
-            Socket socket = new Socket(httpObject.host, 8080);
+            Socket socket = new Socket(httpObject.host, httpObject.port);
             PrintWriter wtr = new PrintWriter(socket.getOutputStream());
-            wtr.println("GET " + httpObject.urlParamaters + " HTTP/1.1");
+            wtr.println("GET " + httpObject.urlParameters + " HTTP/1.1");
             wtr.println("Host: " + httpObject.host);
             if (httpObject.headers.size() > 0) {
                 for (String temp : httpObject.headers) {

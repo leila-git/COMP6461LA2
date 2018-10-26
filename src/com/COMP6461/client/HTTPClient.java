@@ -90,16 +90,22 @@ public class HTTPClient {
                 http.readFromFile = true;
                 http.fileName = ar[i + 1].replace("'", "");
             }
-            if (ar[i].startsWith("'http://")) {
-                http.url = ar[i].replace("'", "");
-                http.host = http.url.split("/")[2];
-                http.urlParamaters = http.url.split("/")[3];
+            if (ar[i].startsWith("127")) {
+                http.url = ar[i];
+                String urlParts[] = http.url.split("/");
+                if (urlParts.length > 1) {
+                    http.urlParameters += urlParts[1];
+                }
+                http.host = urlParts[0].split(":")[0];
+                http.port = Integer.parseInt(urlParts[0].split(":")[1]);
+
             }
             if (ar[i].equals("-o")) {
                 http.writeTofile = true;
                 http.fileName = ar[i + 1];
             }
         }
+        System.out.println(http);
         return http;
     }
 

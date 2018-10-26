@@ -14,4 +14,14 @@ public class HttpServerRequest {
         this.headers = new ArrayList<>();
         this.body = new StringBuilder();
     }
+
+    @Override
+    public String toString() {
+        return "HttpServerRequest{" +
+                "method='" + method + '\'' +
+                ", uri='" + uri + '\'' +
+                ", headers=" + headers +
+                ", body=" + body +
+                '}';
+    }
 }

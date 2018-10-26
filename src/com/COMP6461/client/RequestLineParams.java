@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class RequestLineParams {
     String host;
     String url;
-    String urlParamaters;
+    int port;
+    String urlParameters;
     String data;
     String typeRequest;
     boolean isVerbose;
@@ -14,24 +15,27 @@ public class RequestLineParams {
     boolean writeTofile;
     String fileName;
     ArrayList<String> headers;
-    public RequestLineParams(){
+
+    public RequestLineParams() {
         headers = new ArrayList<String>();
+        urlParameters = "/";
     }
 
     @Override
     public String toString() {
         return "RequestLineParams{" +
-                "\nhost='" + host + '\'' +
-                ", \nurl='" + url + '\'' +
-                ", \nurlParamaters='" + urlParamaters + '\'' +
-                ", \ndata='" + data + '\'' +
-                ", \ntypeRequest='" + typeRequest + '\'' +
-                ", \nisVerbose=" + isVerbose +
-                ", \nisInline=" + isInline +
-                ", \nreadFromFile=" + readFromFile +
-                ", \nwriteTofile=" + writeTofile +
-                ", \nfileName='" + fileName + '\'' +
-                ", \nheaders=" + headers +
+                "host='" + host + '\'' +
+                ", url='" + url + '\'' +
+                ", port=" + port +
+                ", urlParameters='" + urlParameters + '\'' +
+                ", data='" + data + '\'' +
+                ", typeRequest='" + typeRequest + '\'' +
+                ", isVerbose=" + isVerbose +
+                ", isInline=" + isInline +
+                ", readFromFile=" + readFromFile +
+                ", writeTofile=" + writeTofile +
+                ", fileName='" + fileName + '\'' +
+                ", headers=" + headers +
                 '}';
     }
 }
