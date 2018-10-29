@@ -99,6 +99,8 @@ public class SocketConnectionFromServer implements Runnable {
                     listOfFilesNames.append("\n" + listOfFiles[i].getName());
                 }
                 responseToSend.append("\nContent-Length:" + listOfFilesNames.length());
+                responseToSend.append("\nContent-Type: text/directory");
+                responseToSend.append("\nContent-Disposition: inline");
                 responseToSend.append("\n");
                 responseToSend.append("\n{" + listOfFilesNames + "\n}");
             } else {
@@ -127,6 +129,7 @@ public class SocketConnectionFromServer implements Runnable {
                     }
                     responseToSend.append("\nContent-type: text/plain");
                     responseToSend.append("\nContent-Length:" + linesFromFile.length());
+                    responseToSend.append("\nContent-Disposition: inline");
                     responseToSend.append("\n");
                     responseToSend.append("\n{" + linesFromFile + "\n}");
                 }
