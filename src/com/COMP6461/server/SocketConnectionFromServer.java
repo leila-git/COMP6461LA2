@@ -27,7 +27,7 @@ public class SocketConnectionFromServer implements Runnable {
     public void initiateServer() {
         try {
             ServerSocket serverConnect = new ServerSocket(serverStartingParams.port);
-            this.printIfDebug("Server started.\nListening for connections on port : " + serverStartingParams.port + " ...\n");
+            System.out.println("Server started.\nListening for connections on port : " + serverStartingParams.port + " ...\n");
 
             // we listen until user halts server execution
             while (true) {
@@ -38,8 +38,11 @@ public class SocketConnectionFromServer implements Runnable {
                 }
 
                 // create dedicated thread to manage the client connection
-                Thread thread = new Thread(myServer);
-                thread.start();
+                synchronized (this) {
+                    Thread thread = new Thread(myServer);
+                    thread.start();
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
